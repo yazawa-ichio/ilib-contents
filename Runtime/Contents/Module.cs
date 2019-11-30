@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ILib.Contents
@@ -15,6 +17,11 @@ namespace ILib.Contents
 		/// Typeに登録したイベントのみ実行されます。
 		/// </summary>
 		public abstract ModuleType Type { get; }
+
+		/// <summary>
+		/// Ownerのオブジェクトです。
+		/// </summary>
+		public ContentsController Controller { get; internal set; }
 
 		/// <summary>
 		/// コンテンツの初期化直前のイベントです。
@@ -86,6 +93,14 @@ namespace ILib.Contents
 		/// コンテンツを遷移完了イベントです。
 		/// </summary>
 		public virtual Task OnEndSwitch(Content prev, Content next) => Util.Successed;
+
+		/// <summary>
+		/// 並列実行するためModuleを結合します。
+		/// </summary>
+		public static CombineModule Combine(IEnumerable<Module> enumerable)
+		{
+			return new CombineModule(enumerable.ToArray());
+		}
 
 	}
 

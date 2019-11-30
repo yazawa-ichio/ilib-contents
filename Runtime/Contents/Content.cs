@@ -130,7 +130,10 @@ namespace ILib.Contents
 		/// 終了時の処理です。
 		/// </summary>
 		protected virtual Task OnShutdown() => Util.Successed;
-
+		/// <summary>
+		/// 例外をハンドリングします
+		/// </summary>
+		protected virtual bool IsHandleException => true;
 
 		/// <summary>
 		/// 自身の子にコンテンツを追加します。
@@ -160,7 +163,7 @@ namespace ILib.Contents
 			Log.Debug("[ilib-content]start Append(Type:{0},param:{1})", type, prm);
 			var content = (Content)Activator.CreateInstance(type);
 			m_Children.Add(content);
-			return content.Boot(Controller, this, prm);
+			return !IsHandleException ? content.Boot(Controller, this, prm) : Handle(content.Boot(Controller, this, prm));
 		}
 
 		/// <summary>
@@ -185,7 +188,16 @@ namespace ILib.Contents
 		/// モーダルとして子のコンテンツを追加します。
 		/// 追加したコンテンツの結果を待ちます。
 		/// </summary>
-		public async Task<TResult> Modal<TResult>(Type type, object prm = null, CancellationToken token = default)
+		/// <summary>
+		/// モーダルとして子のコンテンツを追加します。
+		/// 追加したコンテンツの結果を待ちます。
+		/// </summary>
+		public Task<TResult> Modal<TResult>(Type type, object prm = null, CancellationToken token = default)
+		{
+			return IsHandleException ? ModalImpl<TResult>(type, prm, token) : Handle(ModalImpl<TResult>(type, prm, token));
+		}
+
+		async Task<TResult> ModalImpl<TResult>(Type type, object prm = null, CancellationToken token = default)
 		{
 
 			if (!typeof(IModalContent<TResult>).IsAssignableFrom(type))
@@ -221,17 +233,17 @@ namespace ILib.Contents
 		/// <summary>
 		/// 停止後の復帰処理を行います。
 		/// </summary>
-		public Task Resume() => DoRun();
+		public Task Resume() => !IsHandleException ? DoRun() : Handle(DoRun());
 
 		/// <summary>
 		/// 停止処理を開始します。
 		/// </summary>
-		public Task Suspend() => DoSuspend();
+		public Task Suspend() => !IsHandleException ? DoSuspend() : Handle(DoSuspend());
 
 		/// <summary>
 		/// 終了処理を開始します。
 		/// </summary>
-		public Task Shutdown() => DoShutdown();
+		public Task Shutdown() => !IsHandleException ? DoShutdown() : Handle(DoShutdown());
 
 		/// <summary>
 		/// 終了処理と指定コンテンツへの遷移を開始します。
@@ -256,7 +268,7 @@ namespace ILib.Contents
 			{
 				throw new InvalidOperationException("modal content not use Switch. use ResultModal.");
 			}
-			return DoSwitch(type, prm);
+			return !IsHandleException ? DoSwitch(type, prm) : Handle(DoSwitch(type, prm));
 		}
 
 		bool HasModule(ModuleType type) => (type & Modules.Type) == type;
@@ -463,6 +475,77 @@ namespace ILib.Contents
 			var routine = Controller.TaskRoutine<T>(enumerator);
 			Managed.Manage(routine);
 			return routine;
+		}
+
+		protected async Task<T> Handle<T>(Task<T> task, bool handleException = true)
+		{
+			try
+			{
+				return await task;
+			}
+			catch (Exception ex)
+			{
+				if (handleException) ThrowException(ex);
+				throw ex;
+			}
+		}
+
+		protected async Task Handle(Task task, bool handleException = true)
+		{
+			try
+			{
+				await task;
+			}
+			catch (Exception ex)
+			{
+				if(handleException) ThrowException(ex);
+				throw ex;
+			}
+		}
+
+		/// <summary>
+		/// 例外をスローします。
+		/// ハンドリングされない場合、親へと投げられます。
+		/// </summary>
+		/// <param name="exception"></param>
+		protected bool ThrowException(Exception exception)
+		{
+			Log.Debug("[ilib-content] this:{0}, ThrowException:{1}", this, exception);
+			bool ret = false;
+			try
+			{
+				ret = HandleException(exception);
+			}
+			catch (Exception e)
+			{
+				if (m_Parent != null)
+				{
+					m_Parent.ThrowException(exception);
+				}
+				else
+				{
+					Controller.ThrowException(exception);
+				}
+				//別のErrorなのでスローする
+				throw e;
+			}
+			if (!ret)
+			{
+				if (m_Parent != null)
+				{
+					return m_Parent.ThrowException(exception);
+				}
+				else
+				{
+					return Controller.ThrowException(exception);
+				}
+			}
+			return false;
+		}
+
+		protected virtual bool HandleException(Exception ex)
+		{
+			return false;
 		}
 
 	}

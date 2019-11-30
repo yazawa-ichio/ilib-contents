@@ -41,6 +41,11 @@ namespace ILib.Contents
 		public IDispatcher Dispatcher => m_Dispatcher != null ? m_Dispatcher : m_Dispatcher = new Dispatcher(m_EventCall);
 
 		/// <summary>
+		/// コンテンツの例外をハンドリングします
+		/// </summary>
+		public event Func<Exception, bool> OnException;
+
+		/// <summary>
 		/// コントローラーを起動します。
 		/// BootParamで指定したコンテンツが起動します。
 		/// </summary>
@@ -56,6 +61,7 @@ namespace ILib.Contents
 		{
 			if (m_Root != null) throw new InvalidOperationException("already boot ContentsController");
 			m_Root = new T();
+			Modules.Set(this);
 			return m_Root.Boot(this, null, prm);
 		}
 
@@ -92,6 +98,24 @@ namespace ILib.Contents
 		}
 
 		protected virtual void OnDestroyEvent() { }
+
+		/// <summary>
+		/// 例外をスローします
+		/// </summary>
+		public bool ThrowException(Exception ex)
+		{
+			if (!HandleException(ex))
+			{
+				if (OnException != null && OnException(ex))
+				{
+					return true;
+				}
+				Log.Exception(ex);
+			}
+			return false;
+		}
+
+		protected virtual bool HandleException(Exception ex) => false;
 
 	}
 
