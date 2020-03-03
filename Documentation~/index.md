@@ -1,4 +1,4 @@
-# [ilib-serv-injector](https://github.com/yazawa-ichio/ilib-contents)
+# [ilib-contents](https://github.com/yazawa-ichio/ilib-contents)
 
 Unity Contents Package.
 
