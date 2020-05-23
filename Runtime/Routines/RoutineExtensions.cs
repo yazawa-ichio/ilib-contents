@@ -30,7 +30,7 @@ namespace ILib
 		{
 			return ILib.Routine.Task<T>(behaviour, routine);
 		}
-		
+
 		/// <summary>
 		/// Unityのコルーチンのラッパーです。
 		/// 完了と例外を取得できます。
@@ -39,7 +39,7 @@ namespace ILib
 		{
 			return ILib.Routine.Start(self.RoutineOwner, routine);
 		}
-		
+
 		/// <summary>
 		/// Unityのコルーチンのラッパーです。
 		/// IHasResult[T]型を返すイテレータをコンストラクタで指定してください。
@@ -49,7 +49,7 @@ namespace ILib
 		{
 			return ILib.Routine.Task<T>(self.RoutineOwner, routine);
 		}
-		
+
 
 	}
 }

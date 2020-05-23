@@ -89,7 +89,7 @@ namespace ILib.Routines
 						m_Coroutine = null;
 						yield break;
 					}
-					else if(ret.Next)
+					else if (ret.Next)
 					{
 						continue;
 					}

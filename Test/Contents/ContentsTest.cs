@@ -15,7 +15,7 @@ using System.Threading;
 public class ContentsTest
 {
 
-	class Tester : IDisposable , IHasDispatcher
+	class Tester : IDisposable, IHasDispatcher
 	{
 		GameObject m_obj;
 		public ContentsController Controller { get; private set; }

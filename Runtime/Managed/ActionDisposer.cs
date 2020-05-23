@@ -6,7 +6,7 @@ namespace ILib.Managed
 	{
 		Action m_Action;
 
-		public ActionDisposer(Action action) =>  m_Action = action;
+		public ActionDisposer(Action action) => m_Action = action;
 
 		public void Dispose()
 		{

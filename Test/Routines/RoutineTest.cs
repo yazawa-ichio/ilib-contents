@@ -83,7 +83,7 @@ public class RoutineTest
 			//トリガーが実行される
 			var routine = tester.Routine(GetResults());
 			bool ret = false;
-			routine.Observe((x,_) => ret = x);
+			routine.Observe((x, _) => ret = x);
 			yield return routine;
 			Assert.IsTrue(ret);
 		}

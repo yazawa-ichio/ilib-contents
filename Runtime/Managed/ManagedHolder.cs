@@ -32,7 +32,7 @@ namespace ILib.Managed
 			}
 		}
 
-		public T Manage<T>(T disposable) where T :IDisposable
+		public T Manage<T>(T disposable) where T : IDisposable
 		{
 			if (m_Disposed)
 			{

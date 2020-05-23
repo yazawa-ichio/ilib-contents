@@ -52,7 +52,7 @@ namespace ILib.Caller
 				{
 					method.Invoke(instance, null);
 				}
-				else if(prm != null && Parameters[key].ParameterType.IsAssignableFrom(prm.GetType()))
+				else if (prm != null && Parameters[key].ParameterType.IsAssignableFrom(prm.GetType()))
 				{
 					m_Prm[0] = prm;
 					method.Invoke(instance, m_Prm);

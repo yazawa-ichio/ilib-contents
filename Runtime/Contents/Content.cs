@@ -96,7 +96,7 @@ namespace ILib.Contents
 		/// <summary>
 		/// イベントの発火装置です
 		/// </summary>
-		protected  EventCall EventCall => Controller.EventCall;
+		protected EventCall EventCall => Controller.EventCall;
 
 		/// <summary>
 		/// 起動処理です。
@@ -498,7 +498,7 @@ namespace ILib.Contents
 			}
 			catch (Exception ex)
 			{
-				if(handleException) ThrowException(ex);
+				if (handleException) ThrowException(ex);
 				throw ex;
 			}
 		}
