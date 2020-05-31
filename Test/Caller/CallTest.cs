@@ -1,12 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿
+using ILib.Caller;
 using NUnit.Framework;
 using Assert = UnityEngine.Assertions.Assert;
-
-using ILib;
-using ILib.Caller;
 
 public class CallTest
 {
@@ -134,6 +129,22 @@ public class CallTest
 		Assert.AreEqual(val, "test");
 		Assert.AreEqual(valLength, "test".Length);
 		*/
+	}
+
+	[Test]
+	public void MessageTest5()
+	{
+		//実行中に登録したイベントは発火されない
+		EventCall call = new EventCall();
+		System.Action action = null;
+		action = () =>
+		{
+			call.Subscribe("Test", action);
+		};
+		action();
+		call.Broadcast("Test");
+		call.Broadcast("Test");
+		call.Broadcast("Test");
 	}
 
 	[Test]

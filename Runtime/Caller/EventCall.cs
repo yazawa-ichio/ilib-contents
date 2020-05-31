@@ -240,7 +240,7 @@ namespace ILib.Caller
 			try
 			{
 				m_RemoveLock++;
-				for (int i = 0; i < m_Paths.Count; i++)
+				for (int i = 0, count = m_Paths.Count; i < count; i++)
 				{
 					PathBase path = m_Paths[i];
 					if (m_Removes != null && m_Removes.Contains(path)) continue;
@@ -306,7 +306,7 @@ namespace ILib.Caller
 			try
 			{
 				m_RemoveLock++;
-				for (int i = 0; i < m_Paths.Count; i++)
+				for (int i = 0, count = m_Paths.Count; i < count; i++)
 				{
 					PathBase path = m_Paths[i];
 					if (m_Removes != null && m_Removes.Contains(path)) continue;
@@ -373,7 +373,7 @@ namespace ILib.Caller
 			try
 			{
 				m_RemoveLock++;
-				for (int i = 0; i < m_Paths.Count; i++)
+				for (int i = 0, count = m_Paths.Count; i < count; i++)
 				{
 					PathBase path = m_Paths[i];
 					if (m_Removes != null && m_Removes.Contains(path)) continue;
@@ -436,7 +436,7 @@ namespace ILib.Caller
 			try
 			{
 				m_RemoveLock++;
-				for (int i = 0; i < m_Paths.Count; i++)
+				for (int i = 0, count = m_Paths.Count; i < count; i++)
 				{
 					PathBase path = m_Paths[i];
 					if (m_Removes != null && m_Removes.Contains(path)) continue;

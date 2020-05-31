@@ -1,14 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System;
 
 namespace ILib.Contents
 {
 	using Caller;
-	using Routines;
-	using System.Threading.Tasks;
-	using System.Threading;
 	using ILib.Managed;
+	using System.Threading;
+	using System.Threading.Tasks;
 	using Log = Contents.ContentsLog;
 
 	public class Content<T> : Content
@@ -486,7 +485,7 @@ namespace ILib.Contents
 			catch (Exception ex)
 			{
 				if (handleException) ThrowException(ex);
-				throw ex;
+				throw;
 			}
 		}
 
@@ -499,7 +498,7 @@ namespace ILib.Contents
 			catch (Exception ex)
 			{
 				if (handleException) ThrowException(ex);
-				throw ex;
+				throw;
 			}
 		}
 
@@ -516,7 +515,7 @@ namespace ILib.Contents
 			{
 				ret = HandleException(exception);
 			}
-			catch (Exception e)
+			catch
 			{
 				if (m_Parent != null)
 				{
@@ -527,7 +526,7 @@ namespace ILib.Contents
 					Controller.ThrowException(exception);
 				}
 				//別のErrorなのでスローする
-				throw e;
+				throw;
 			}
 			if (!ret)
 			{
